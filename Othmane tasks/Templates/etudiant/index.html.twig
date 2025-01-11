@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste Courses!{% endblock %}
+{% block body %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+        <a class="navbar-brand" href="#">Quiz</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home Page</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">link2</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">link3</a>
+            </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="row">
+            {% for course in courses %}
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-header">
+                            {{ course.nom }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Quiz {{course.nom}}</h5>
+                            <img src="https://i.pinimg.com/236x/5f/3e/34/5f3e340a0068cb1e1a61011229d25c25.jpg"/>
+                            <p class="card-text">Êtes-vous prêt à passer le test et à évaluer vos connaissances ?</p>
+                            <a href="{{ path('interface.quiz',{id:course.id}) }}" class="btn btn-primary">Passer un Test</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
