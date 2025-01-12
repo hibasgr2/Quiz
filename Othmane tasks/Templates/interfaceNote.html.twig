@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block title %} Interface Note {% endblock %}
 {% block body %}
-
+    {% for item in rep %}
+        <p>{{ item }} <p>
+    {% endfor %}
+    <strong>{{ note }}</strong>
 
 {% endblock %}
