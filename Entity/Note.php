@@ -15,11 +15,6 @@ class Note
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'notes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
     #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 4)]
     private ?string $note = null;
 
@@ -30,6 +25,10 @@ class Note
     #[ORM\JoinColumn(nullable: false)]
     private ?Courses $course = null;
 
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->course = new ArrayCollection();
@@ -39,12 +38,6 @@ class Note
     {
         return $this->id;
     }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
     public function setUser(?User $user): static
     {
         $this->user = $user;
@@ -87,5 +80,10 @@ class Note
         $this->course = $course;
 
         return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 }
