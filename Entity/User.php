@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,7 +14,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    #[ORM\Column(length: 50)]
+    private ?string $matricule = null;
+    #[ORM\Column(length: 50)]
+    private ?string $nomComplet = null;
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -30,20 +31,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $nom = null;
+    // #[ORM\Column(length: 50)]
+    // private ?string $nom = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $prenom = null;
+    // #[ORM\Column(length: 50)]
+    // private ?string $prenom = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Note::class, orphanRemoval: true)]
-    private Collection $user;
     public function __construct(){
         $this->createdAt = new \DateTimeImmutable;
-        $this->user = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -126,29 +124,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
+    // public function getNom(): ?string
+    // {
+    //     return $this->nom;
+    // }
 
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
+    // public function setNom(string $nom): static
+    // {
+    //     $this->nom = $nom;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
+    // public function getPrenom(): ?string
+    // {
+    //     return $this->prenom;
+    // }
 
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
+    // public function setPrenom(string $prenom): static
+    // {
+    //     $this->prenom = $prenom;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
@@ -162,32 +160,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Note>
-     */
-    public function getUser(): Collection
+    public function getMatricule(): ?string
     {
-        return $this->user;
+        return $this->matricule;
     }
 
-    public function addUser(Note $user): static
+    public function setMatricule(string $matricule): static
     {
-        if (!$this->user->contains($user)) {
-            $this->user->add($user);
-            $user->setUser($this);
-        }
+        $this->matricule = $matricule;
 
         return $this;
     }
 
-    public function removeUser(Note $user): static
+    public function getNomComplet(): ?string
     {
-        if ($this->user->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getUser() === $this) {
-                $user->setUser(null);
-            }
-        }
+        return $this->nomComplet;
+    }
+
+    public function setNomComplet(string $nomComplet): static
+    {
+        $this->nomComplet = $nomComplet;
 
         return $this;
     }
