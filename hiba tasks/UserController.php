@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Entity\Note;
+use App\Entity\Courses;
+use App\Form\RegisterFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,55 +23,30 @@ final class UserController extends AbstractController
     #[Route(name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
+        $user = $this->getUser(); // Récupérez l'utilisateur connecté
+
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findBy(['role' => 'Etudiant']),
-        ]);
+            'users' => $userRepository->findAll(),
+            'admin' => $user,
+            ]);
     }
 
-    #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository,UserPasswordHasherInterface $hasher): Response
-{
-    $user = new User();
-    $form = $this->createForm(UserType::class, $user);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        // On vérifie si l'utilisateur existe déjà
-        $existingUser = $userRepository->findOneBy(['matricule' => $user->getMatricule()]);
-
-        if ($existingUser) {
-            // Si l'utilisateur existe déjà, on affiche un message d'erreur
-            $this->addFlash('error', 'Un utilisateur avec cette matricule existe déjà.');
-
-            return $this->redirectToRoute('app_user_new');  
-        }
-       
-        //Sinon on enregistre l'utilisateur
-        $user->setPassword($hasher->hashPassword($user, $user->getPassword()));
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-    return $this->render('user/new.html.twig', [
-        'user' => $user,
-        'form' => $form,
-    ]);
-}
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(User $user, EntityManagerInterface $manager): Response
     {
+        $notes = $manager->getRepository(Note::class)->findBy(['user' =>$user]);
+    
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'notes' => $notes,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user,UserRepository $userRepository, EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(RegisterFormType::class, $user);
         $form->handleRequest($request);
 
         $existingUser = $userRepository->findOneBy(['matricule' => $user->getMatricule()]);
@@ -90,7 +67,7 @@ final class UserController extends AbstractController
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -98,9 +75,7 @@ final class UserController extends AbstractController
     public function delete(UserPasswordHasherInterface $passwordHasher, Request $request, User $user, EntityManagerInterface $entityManager): Response
 {
     if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
-/*         if (!$passwordHasher->isPasswordValid($user, $request->request->get('password'))) {
-            throw new AccessDeniedHttpException();
-        } */
+
         $entityManager->remove($user);
         $entityManager->flush();
 

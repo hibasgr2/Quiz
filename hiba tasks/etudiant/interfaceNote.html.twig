@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+{% block title %} Interface Note {% endblock %}
+
+{% block body %}
+
+{% if note>=15 %}
+
+<div class="alert alert-dismissible alert-success">
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <strong>Excellent travaille!<3 !!</strong> 
+</div>
+
+{% elseif note<15 and note>=10  %}
+
+<div class="alert alert-dismissible alert-warning">
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <strong>Bon travaille!!!</strong> 
+</div>
+
+{% else %}
+
+<div class="alert alert-dismissible alert-danger">
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <strong>sir raj3 mzyann!!!</strong> 
+</div>
+
+{% endif %}
+
+
+<form >
+    <div class="container"  style=" margin-bottom: 20px;">
+        {% for course in courses %}
+            <input type="hidden" value="{{course.course_id}}" name={{"id_course"}}>
+
+            <div class="card m-5 mt-5">
+
+                <div class="card-header">
+                    <h5> {{ loop.index }} - {{ course.question }} </h5>
+                </div>
+
+               
+               
+                <div class="card-body">
+
+                {% set point = 0 %}
+
+                   {% for i in course.reponses%}
+                      {% for elem in rep %}
+
+                      {% if elem == i %}
+                      {% if elem in course.reponse_vrai %}
+
+                      <span style="color: green;">{{ i }}</span><br>
+                      {% set point = 2 %}
+                      
+                      {% else %}
+                      
+                       <span style="color: red;">{{ i }}</span><br>
+
+                        {% endif %}
+
+                        {% endif %}
+                       {% endfor %}
+                    {% endfor %} 
+                  </div> 
+                   
+
+        
+                <div class="card-footer">
+                {% if point == 2 %}
+                    <p>+ 2 Points </p>
+                {% else %}
+                    <p>0 Point </p>
+                {% endif %}   
+                </div>
+
+
+            </div>
+        {% endfor %}
+
+     
+        {% if note>=15 %}
+
+<div class="card text-white bg-success mb-3" style="max-width: 100%;">
+  <div class="card-body" style="text-align : center">
+    <h2 class="card-title">Vous avez valider ce cours : <strong>{{ etat }}</strong> </h2>
+    <p class="card-text">
+    <strong><h2>Note: {{ note }}</h2> </strong>
+    </p>
+  </div>
+</div>
+
+{% elseif note<15 and note>=10  %}
+
+<div class="card text-white bg-warning mb-3" style="max-width: 100%;">
+  <div class="card-body" style="text-align : center">
+    <h2 class="card-title">Vous avez valider ce cours : <strong>{{ etat }}</strong> </h2>
+    <p class="card-text">
+    <strong><h2>Note: {{ note }}</h2> </strong>
+    </p>
+  </div>
+</div>
+
+
+{% else %}
+
+<div class="card text-white bg-danger mb-3" style="max-width: 100%;">
+  <div class="card-body" style="text-align : center">
+    <h2 class="card-title">Vous avez valider ce cours : <strong>{{ etat }}</strong> </h2>
+    <p class="card-text">
+    <strong><h2>Note: {{ note }}</h2> </strong>
+    </p>
+  </div>
+</div>
+
+{% endif %}
+        
+
+            <div class="d-flex justify-content-end">
+                <a href="{{ path('courses.acceuil') }}" class="btn btn-primary mx-3">Retour A L'acceuil</a>
+            </div>
+    </div>
+</form>
+
+{% endblock %}

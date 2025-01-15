@@ -1,44 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
 
 {% block body %}
-    <br><h1>Les détails d'etudiant : </h1>
+
+<div style=" margin-bottom: 20px; padding: 20px; margin-top: 20px;">
+<h1  style=" text-align : center ;"><strong>Votre profile</strong></h1>
+
+<h2>Détails  :</h2>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Matricule </th>
+                <th>Matricule</th>
                 <td>{{ user.matricule }}</td>
             </tr>
             <tr>
-                <th>Nom </th>
+                <th>Nom</th>
                 <td>{{ user.nomComplet }}</td>
             </tr>
             <tr>
-                <th>Email </th>
+                <th>Email</th>
                 <td>{{ user.email }}</td>
             </tr>
             <tr>
-                <th>Password </th>
+                <th>Password</th>
                 <td>{{ user.password }}</td>
             </tr>
             <tr>
-                <th>Role </th>
-                {% set found = false %}
+                <th>Role</th>
                  {% for role in user.roles %}
-                     <td>{{ role }}</td>
-                    {% if role == 'ROLE_USER' %}
-                            {% set found = true %}
-                    {% endif %}
+                <td>{{ role }}</td>
                 {% endfor %}
             </tr>
         </tbody>
     </table>
 
-{% if found %}
-
-    <table  class="table table-hover" >
+<h2>Quiz Passés</h2>
+ <table  class="table table-hover" >
     <thead>
         <tr>
             <th scope="row">Cours</th>
@@ -88,10 +86,8 @@
     </tbody>
 
     </table>
+    
+    <a href="{{ path('courses.acceuil') }}"  class="btn btn-success" role="button" >back to list</a>
 
-{% endif %}
-    <a href="{{ path('app_user_index') }}"  class="btn btn-success" role="button" >back to list</a>
-
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}"  class="btn btn-info" role="button">edit</a> 
-    {{ include('user/_delete_form.html.twig') }}
+</div>
 {% endblock %}

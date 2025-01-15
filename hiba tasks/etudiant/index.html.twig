@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste Courses!{% endblock %}
+{% block body %}
+
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="{{ path('courses.acceuil') }}">Home
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('etudiant.profile') }}">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path ('security.logout') }}">Log out </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="container mt-5" style=" margin-bottom: 20px;">
+        <div class="row">
+            {% for course in courses %}
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-header">
+                            {{ course.nom }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Quiz {{course.nom}}</h5>
+                            <img src="https://i.pinimg.com/236x/5f/3e/34/5f3e340a0068cb1e1a61011229d25c25.jpg"/>
+                            <p class="card-text">Êtes-vous prêt à passer le test et à évaluer vos connaissances ?</p>
+                            <a href="{{ path('interface.quiz',{id:course.id}) }}" class="btn btn-primary">Passer un Test</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
